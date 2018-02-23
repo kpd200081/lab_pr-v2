@@ -7,20 +7,22 @@
 
 class ComClass
 {
-private:
+protected:
+    int data_size;
+public:
     int train_number;
 
-    int data_size;
+    ComClass* next;
+    ComClass* prev;
 
-public:
-
-    ComClass();
+    ComClass(ComClass* prev, ComClass* next,int tr_n);
+    ComClass(ComClass* prev, ComClass* next);
     ~ComClass();
-    std::vector<char> getWritebleData() const;
-    void setData(std::vector<char>&);
+    virtual std::vector<unsigned char> getWritebleData()=0;
+    virtual void setData(std::vector<unsigned char>&)=0;
     int getDataSize() const;
     //friend RWWorker& operator<<(RWWorker& out, const ComClass obj);
-   // friend RWWorker& operator>>(RWWorker& in, const ComClass obj);
+    //friend RWWorker& operator>>(RWWorker& in, const ComClass obj);
 };
 
 #endif // COMCLASS_H

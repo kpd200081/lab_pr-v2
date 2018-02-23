@@ -66,16 +66,28 @@ bool RWWorker::checkCheckSum()
 void RWWorker::creationOfFile()
 {
     fileWasCreated=true;
-    buf[0]='t';
+    using namespace std;
+    cout<<"File not exist. It will be created.\n";
+    ofstream tof("temp.hex", ios::binary|ios::out);
+    int temp=0;
+    tof<<temp<<temp<<temp;
+    tof.close();
+    ifstream tif("temp.hex",ios::binary|ios::in);
+    char c;
+    while(tif.get(c)){
+        buf.push_back(c);
+    }
+    tif.close();
+    remove("temp.hex");
     write();
 }
 
 RWWorker::~RWWorker()
 {}
 
-RWWorker &operator<<(RWWorker& self,const ComClass& obj)
+RWWorker &operator<<(RWWorker& self, ComClass& obj)
 {
-    std::vector<char> t=obj.getWritebleData();
+    std::vector<unsigned char> t=obj.getWritebleData();
     for(int i=0;i<t.size();i++)
         self.buf.push_back(t[i]);
     return self;
@@ -83,12 +95,13 @@ RWWorker &operator<<(RWWorker& self,const ComClass& obj)
 
 RWWorker &operator>>(RWWorker& self, ComClass& obj)
 {
-    std::vector<char> t;
+    std::vector<unsigned char> t;
     t.reserve(obj.getDataSize());
     for(int i=0;i<t.size();i++){
-        t.push_back((self.buf[self.buf.size()-1]));
-        self.buf.pop_back();
+        t.push_back((self.buf[i]));
+        self.buf.pop_front();
       }
+    obj.setData(t);
     return self;
 }
 

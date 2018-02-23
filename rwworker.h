@@ -15,9 +15,7 @@ class ComClass;
 
 class RWWorker
 {
-public:
-    std::deque<unsigned char> buf;
-private:
+
     std::string name, key;
     bool fileWasCreated=false;
 
@@ -25,6 +23,7 @@ private:
     Encrypt aes;
 
 public:
+    std::deque<unsigned char> buf;
     RWWorker();
     void set_key(std::string);
     void set_file(std::string);
@@ -33,7 +32,7 @@ public:
     void calcCheckSum();
     bool checkCheckSum();
     void creationOfFile();
-    friend RWWorker& operator<<(RWWorker&,const ComClass&);
+    friend RWWorker& operator<<(RWWorker&,ComClass&);
     friend RWWorker& operator>>(RWWorker&,ComClass&);
     ~RWWorker();
 };
