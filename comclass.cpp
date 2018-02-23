@@ -5,6 +5,9 @@ ComClass::ComClass()
 
 }
 
+ComClass::~ComClass()
+{}
+
 std::vector<char> ComClass::getWritebleData() const
 {
 

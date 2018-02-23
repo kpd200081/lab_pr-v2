@@ -15,7 +15,7 @@ private:
 public:
 
     ComClass();
-
+    ~ComClass();
     std::vector<char> getWritebleData() const;
     void setData(std::vector<char>&);
     int getDataSize() const;

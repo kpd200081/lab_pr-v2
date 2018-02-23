@@ -14,7 +14,7 @@ public:
     void update(std::istream &is);
     std::string final();
     static std::string from_file(const std::string &filename);
-
+    ~SHA1();
 private:
     uint32_t digest[5];
     std::string buffer;

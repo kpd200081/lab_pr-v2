@@ -289,3 +289,6 @@ std::string SHA1::from_file(const std::string &filename)
     checksum.update(stream);
     return checksum.final();
 }
+
+SHA1::~SHA1()
+{}

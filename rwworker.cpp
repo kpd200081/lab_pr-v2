@@ -5,35 +5,73 @@ RWWorker::RWWorker()
 
 }
 
-void RWWorker::set_key(char * c_key)
+void RWWorker::set_key(std::string c_key)
 {
     key=c_key;
 }
 
-void RWWorker::set_file(char *c_name)
+void RWWorker::set_file(std::string c_name)
 {
     name=c_name;
 }
 
 void RWWorker::write()
 {
-
+    buf.push_front('k'); buf.push_front('o'); buf.push_front('c'); buf.push_front('n'); buf.push_front('E');
+    std::string data;
+    for(int i=0; i<buf.size();i++)
+         data+=buf[i];
+    std::string res=aes.work(data,key, false);
+    buf.clear();
+    for(int i=0; i<res.length();i++)
+         buf.push_back(res[i]);
+    calcCheckSum();
+    std::ofstream out(name);
+    for(int i=0; i<buf.size();i++)
+        out.put(buf[i]);
+    out.close();
+    buf.clear();
 }
 
 void RWWorker::calcCheckSum()
 {
-
+    std::string data;
+    std::string sum;
+    for(int i =0;i<buf.size();i++)
+        data+=buf[i];
+    checksum.update(data);
+    sum=checksum.final();
+    for(int i=0;i<sum.length();i++)
+        buf.push_back(sum[i]);
 }
 
 bool RWWorker::checkCheckSum()
 {
-  return true;
+    if(buf.size()<40)
+        return false;
+    std::string base;
+    for(int i=0;i<buf.size()-40;i++)
+        base+=buf[i];
+    std::string sum;
+    for(int i=buf.size()-40;i<buf.size();i++)
+        sum+=buf[i];
+    checksum.update(base);
+    if(!(sum==checksum.final()))
+        return false;
+    for(int i=0;i<40;i++)
+        buf.pop_back();
+    return true;
 }
 
-void RWWorker::creationOfFile(std::ofstream& out)
+void RWWorker::creationOfFile()
 {
-
+    fileWasCreated=true;
+    buf[0]='t';
+    write();
 }
+
+RWWorker::~RWWorker()
+{}
 
 RWWorker &operator<<(RWWorker& self,const ComClass& obj)
 {
@@ -58,37 +96,44 @@ RWWorker &operator>>(RWWorker& self, ComClass& obj)
 
 bool RWWorker::init()
 {
-    if(key.c_str()==NULL||name.c_str()==NULL)
+    if(key.c_str()==NULL||name.c_str()==NULL){
+        std::cout<<"Err: no data"<<std::endl;
         return false;
-    std::ifstream inf(name, std::ios_base::binary|std::ios_base::in);
+    }
+    std::ifstream inf(name, std::ios::binary|std::ios::in);
     if(!inf.is_open()){
         inf.close();
-        std::ofstream onf(name, std::ios_base::binary);
-        creationOfFile(onf);
+        std::ofstream onf(name, std::ios::binary|std::ios::out);
         onf.close();
-        inf.open(name,std::ios_base::binary);
+        creationOfFile();
+        inf.open(name,std::ios::binary|std::ios::in);
     }
     char c;
-    while(true){
-        inf.read(&c,1);
+    while(inf.get(c)){
         buf.push_back(c);
     }
     if(!checkCheckSum()){
         buf.clear();
+        inf.close();
+        std::cout<<"Err: check sum uncorrect"<<std::endl;
         return false;
     }
-//    for(int i=0;i<40;i++)
-//        buf.pop_back();
 
-//    std::string data;
-//    for(int i=0; i<buf.size();i++)
-//        data+=buf[i];
-//    std::string res=Encrypt::work(data,key);
-//    buf.clear();
-//    for(int i=0; i<res.length();i++)
-//         buf.push_back(res[i]);
-//    std::string check; check+=buf[1]; check+=buf[2]; check+=buf[3]; check+=' '; check+=buf[4]; check+=buf[5];
-//    if(!(check=="Enc ok"))
-//        return false;
+    std::string data;
+    for(int i=0; i<buf.size();i++)
+        data+=buf[i];
+    std::string res=aes.work(data,key, true);
+    buf.clear();
+    for(int i=0; i<res.length();i++)
+         buf.push_back(res[i]);
+    std::string check; check+=buf[0]; check+=buf[1]; check+=buf[2]; check+=' '; check+=buf[3]; check+=buf[4];
+    if(!(check=="Enc ok")){
+        buf.clear();
+        inf.close();
+        std::cout<<"Err: decryption error"<<std::endl;
+        return false;
+    }
+    buf.pop_front();  buf.pop_front();  buf.pop_front();  buf.pop_front();  buf.pop_front();
+    inf.close();
     return true;
 }
