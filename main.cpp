@@ -21,6 +21,7 @@ int main(int argc,char** argv)
 //    for(int i=0;i<rww.buf.size();i++)
 //        data+=rww.buf[i];
 //    cout<<data<<endl;
+//    cout<<"\033[1;31m"<<"Test"<<"\033[0m"<<" Test2\n";
     switch (argc) {
     case 1:
         rww.set_file("base.hex");
@@ -40,6 +41,7 @@ int main(int argc,char** argv)
     if(!rww.init())
         return -1;
     MBWorker mbw(&rww);
+    mbw.init();
     if(mbw.menu()){
         mbw.save();
         rww.write();

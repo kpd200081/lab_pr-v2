@@ -13,6 +13,7 @@ Com2Class::Com2Class(Com2Class *prev, Com2Class *next):ComClass(prev, next)
 
 Com2Class::~Com2Class()
 {
-    if(prev)prev->next=next;
-    if(next)next->prev=prev;
+
 }
+
+

@@ -67,10 +67,14 @@ void RWWorker::creationOfFile()
 {
     fileWasCreated=true;
     using namespace std;
+    MENU_INFO
     cout<<"File not exist. It will be created.\n";
+    MENU_END
     ofstream tof("temp.hex", ios::binary|ios::out);
     int temp=0;
-    tof<<temp<<temp<<temp;
+    tof.write(reinterpret_cast<const char *>(&temp),sizeof(temp));
+    tof.write(reinterpret_cast<const char *>(&temp),sizeof(temp));
+    tof.write(reinterpret_cast<const char *>(&temp),sizeof(temp));
     tof.close();
     ifstream tif("temp.hex",ios::binary|ios::in);
     char c;
@@ -97,8 +101,8 @@ RWWorker &operator>>(RWWorker& self, ComClass& obj)
 {
     std::vector<unsigned char> t;
     t.reserve(obj.getDataSize());
-    for(int i=0;i<t.size();i++){
-        t.push_back((self.buf[i]));
+    for(int i=0;i<obj.getDataSize();i++){
+        t.push_back((self.buf.front()));
         self.buf.pop_front();
       }
     obj.setData(t);
@@ -110,7 +114,9 @@ RWWorker &operator>>(RWWorker& self, ComClass& obj)
 bool RWWorker::init()
 {
     if(key.c_str()==NULL||name.c_str()==NULL){
+        MENU_ERROR
         std::cout<<"Err: no data"<<std::endl;
+        MENU_END
         return false;
     }
     std::ifstream inf(name, std::ios::binary|std::ios::in);
@@ -128,7 +134,9 @@ bool RWWorker::init()
     if(!checkCheckSum()){
         buf.clear();
         inf.close();
+        MENU_ERROR
         std::cout<<"Err: check sum uncorrect"<<std::endl;
+        MENU_END
         return false;
     }
 
@@ -143,7 +151,9 @@ bool RWWorker::init()
     if(!(check=="Enc ok")){
         buf.clear();
         inf.close();
+        MENU_ERROR
         std::cout<<"Err: decryption error"<<std::endl;
+        MENU_END
         return false;
     }
     buf.pop_front();  buf.pop_front();  buf.pop_front();  buf.pop_front();  buf.pop_front();
