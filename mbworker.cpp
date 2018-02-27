@@ -33,7 +33,7 @@ void MBWorker::init()
         //stream>>t;
         char c;
         for(int j=0;j<50;j++){
-            stream>>c;
+            stream.get(c);
             if(c!=0)
                 t+=c;
         }
@@ -119,7 +119,7 @@ void MBWorker::save()
     routs.clear();
     for(i=0;i<routs_count*50;i++){
         char c;
-        stream>>c;
+        stream.get(c);
         rww->buf.push_back(c);
     }
 
@@ -581,6 +581,7 @@ void MBWorker::cor_pas()
         cout<<i++<<". "<<*cur;
         cur=cur->next;
     }
+    cout<<"Введите номер соответствующего пассажира: ";
     int pass_n=corInput(pass_count);
     cur=first_p;
     for(i=1;i<pass_n;i++){
@@ -627,16 +628,18 @@ void MBWorker::del_train()
             if(pas->next!=NULL){
             pas=pas->next;
             if(pas==last_p)
-                last_p=NULL;
+                last_p=pas->prev;
             if(pas==first_p)
-                first_p==NULL;
+                first_p=pas->next;
             delete pas->prev;
             }else{
                 if(pas==last_p)
-                    last_p=NULL;
-                if(pas==first_p)
-                    first_p==NULL;
-                delete pas; break;
+                        last_p=pas->prev;
+                    if(pas==first_p)
+                        first_p=pas->next;
+                delete pas;
+                    pass_count--;
+                    break;
             }
             pass_count--;
         }else
@@ -653,9 +656,9 @@ void MBWorker::del_train()
 //        }
 //    }
     if(cur==last_t)
-        last_t=NULL;
+        last_t=cur->prev;
     if(cur==first_t)
-        first_t==NULL;
+        first_t=cur->next;
     delete cur;
     train_count--;
     updateTrainCarFirstP();
@@ -678,10 +681,20 @@ void MBWorker::del_dest()
                 while (pas!=NULL) {
                     if(pas->train_number==cur->train_number){
                         if(pas->next!=NULL){
+                            if(pas==last_p)
+                                last_p=pas->prev;
+                            if(pas==first_p)
+                                first_p=pas->next;
                         pas=pas->next;
                         delete pas->prev;
                         }else{
-                            delete pas; break;
+                            if(pas==last_p)
+                                last_p=pas->prev;
+                            if(pas==first_p)
+                                first_p=pas->next;
+                            delete pas;
+                            pass_count--;
+                            break;
                         }
                         pass_count--;
                     }else
@@ -698,9 +711,9 @@ void MBWorker::del_dest()
 //                    }
 //                }
                 if(cur==last_t)
-                    last_t=NULL;
+                    last_t=cur->prev;
                 if(cur==first_t)
-                    first_t==NULL;
+                    first_t=cur->next;
             cur=cur->next;
             delete cur->prev;
             }else{
@@ -709,17 +722,19 @@ void MBWorker::del_dest()
                     if(pas->train_number==cur->train_number){
                         if(pas->next!=NULL){
                             if(pas==last_p)
-                                last_p=NULL;
-                            if(pas==first_p)
-                                first_p==NULL;
+                                    last_p=pas->prev;
+                                if(pas==first_p)
+                                    first_p=pas->next;
                         pas=pas->next;
                         delete pas->prev;
                         }else{
                             if(pas==last_p)
-                                last_p=NULL;
+                                last_p=pas->prev;
                             if(pas==first_p)
-                                first_p==NULL;
-                            delete pas; break;
+                                first_p=pas->next;
+                            delete pas;
+                            pass_count--;
+                            break;
                         }
                         pass_count--;
                     }else
@@ -736,11 +751,14 @@ void MBWorker::del_dest()
 //                    }
 //                }
                 if(cur==last_t)
-                    last_t=NULL;
+                    last_t=cur->prev;
                 if(cur==first_t)
-                    first_t==NULL;
-                delete cur; break;
+                    first_t=cur->next;
+                delete cur;
+                train_count--;
+                break;
             }
+
             train_count--;
         }else
             cur=cur->next;
@@ -773,15 +791,16 @@ void MBWorker::del_pas()
         cout<<i++<<". "<<*cur;
         cur=cur->next;
     }
+    cout<<"Введите номер соответствующего пассажира: ";
     int pass_n=corInput(pass_count);
     cur=first_p;
     for(i=1;i<pass_n;i++){
         cur=cur->next;
     }
     if(cur==last_p)
-        last_p=NULL;
+        last_p=cur->prev;
     if(cur==first_p)
-        first_p==NULL;
+        first_p=cur->next;
     delete cur;
     pass_count--;
     updateTrainCarFirstP();

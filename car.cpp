@@ -74,13 +74,13 @@ void Car::setData(std::vector<unsigned char> & data)
     remove("temp.hex");
 }
 
-void Car::outPass()
+void Car::outPass(std::ostream &out)
 {
     int j=0;
     Passenger* cur=firstp;
     while(cur!=NULL){
         if(cur->train_number==train_number&&cur->car_number==car_number){
-            std::cout<<"\t\t"<<j+1<<". "<<*cur;
+            out<<"\t\t"<<j+1<<". "<<*cur;
             j++;
         }
         cur=cur->next;
@@ -91,29 +91,29 @@ std::ostream &operator<<(std::ostream &out, Car &self)
 {
     using namespace std;
     ios init(NULL);
-    init.copyfmt(cout);
-    cout<<setfill('0')<<"Поезд №"<<setw(6)<<self.train_number;
-    cout.copyfmt(init);
-    cout<<setfill('0')<<"\tВагон №"<<setw(5)<<self.car_number;
-    cout.copyfmt(init);
-    cout<<"\tТип: ";
-    cout<<setw(8);
+    init.copyfmt(out);
+    out<<setfill('0')<<"Поезд №"<<setw(6)<<self.train_number;
+    out.copyfmt(init);
+    out<<setfill('0')<<"\tВагон №"<<setw(5)<<self.car_number;
+    out.copyfmt(init);
+    out<<"\tТип: ";
+    out<<setw(8);
     switch (self.type) {
         case Car::CarType::Seat:
-            cout<<"Плацкарт";
+            out<<"Плацкарт";
             break;
         case Car::CarType::Compartment:
-            cout<<"Купе";
+            out<<"Купе";
             break;
         case Car::CarType::Restaurant:
-            cout<<"Ресторан";
+            out<<"Ресторан";
     }
-    cout.copyfmt(init);
+    out.copyfmt(init);
     if(self.type!=2)
-        cout<<setfill('0')<<"\tСвободные места:"<<setw(3)<<self.free_sc<<setw(1)<<"/"<<setw(3)<<self.sit_count;
-    cout<<endl;
-    self.outPass();
-    cout.copyfmt(init);
+        out<<setfill('0')<<"\tСвободные места:"<<setw(3)<<self.free_sc<<setw(1)<<"/"<<setw(3)<<self.sit_count;
+    out<<endl;
+    self.outPass(out);
+    out.copyfmt(init);
     return out;
 }
 

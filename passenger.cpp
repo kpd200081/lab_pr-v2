@@ -82,12 +82,12 @@ std::ostream &operator<<(std::ostream &out, Passenger &self)
     using namespace std;
     ios init(NULL);
     init.copyfmt(cout);
-    cout<<"ФИО: "<<self.fio;
-    cout.copyfmt(init);
-    cout<<setfill('0')<<"\tПоезд №"<<setw(6)<<self.train_number;
-    cout.copyfmt(init);
-    cout<<setfill('0')<<"\tВагон №"<<setw(5)<<self.car_number<<endl;
-    cout.copyfmt(init);
+    out<<"ФИО: "<<self.fio;
+    out.copyfmt(init);
+    out<<setfill('0')<<"\tПоезд №"<<setw(6)<<self.train_number;
+    out.copyfmt(init);
+    out<<setfill('0')<<"\tВагон №"<<setw(5)<<self.car_number<<endl;
+    out.copyfmt(init);
     return out;
 }
 

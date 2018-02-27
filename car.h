@@ -23,7 +23,7 @@ public:
     std::vector<unsigned char> getWritebleData();
     void setData(std::vector<unsigned char> &);
     friend std::ostream& operator<<(std::ostream& out, Car& self);
-    void outPass();
+    void outPass(std::ostream &out);
     //friend std::istream& operator>>(std::istream& in, Car& self);
     int getDataSize();
 };
