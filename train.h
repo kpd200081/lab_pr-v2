@@ -11,8 +11,6 @@ public:
     int car_count;
     int full_cc;
     int rout_number;
-    Train* next;
-    Train* prev;
     Car* first;
     Car* last;
     std::vector<std::string>* routs;

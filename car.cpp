@@ -83,7 +83,7 @@ void Car::outPass()
             std::cout<<"\t\t"<<j+1<<". "<<*cur;
             j++;
         }
-        cur=cur->next;
+        cur=dynamic_cast<Passenger*>(cur->next);
     }
 }
 

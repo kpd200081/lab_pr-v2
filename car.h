@@ -11,8 +11,6 @@ public:
     int sit_count;
     int free_sc;
     CarType type;
-    Car* next;
-    Car* prev;
     Passenger* firstp;
     int data_size;
 

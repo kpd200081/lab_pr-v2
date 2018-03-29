@@ -152,13 +152,13 @@ std::ostream &operator<<(std::ostream &out, Train &self)
 {
     using namespace std;
     ios init(NULL);
-    init.copyfmt(cout);
-    cout<<setfill('0')<<"Поезд №"<<setw(6)<<self.train_number;
-    cout.copyfmt(init);
-    cout<<"\tНаправление: "<<(self.routs)->at(self.rout_number-1);
-    cout.copyfmt(init);
-    cout<<setfill('0')<<"\t\tПолные вагоны: "<<setw(5)<<self.full_cc<<setw(1)<<"/"<<setw(5)<<self.car_count<<std::endl;
-    cout.copyfmt(init);
+    init.copyfmt(out);
+    out<<setfill('0')<<"Поезд №"<<setw(6)<<self.train_number;
+    out.copyfmt(init);
+    out<<"\tНаправление: "<<(self.routs)->at(self.rout_number-1);
+    out.copyfmt(init);
+    out<<setfill('0')<<"\t\tПолные вагоны: "<<setw(5)<<self.full_cc<<setw(1)<<"/"<<setw(5)<<self.car_count<<std::endl;
+    out.copyfmt(init);
     Car* cur=self.first;
     while (cur!=NULL) {
         out<<"\t"<<*cur;

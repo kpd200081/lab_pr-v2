@@ -50,13 +50,6 @@ public:
     void updateTrainCarFirstP();
     void cor_train_rout(Train*);
     void cor_train_num(Train*);
-
-
-
-
-
-
-
 };
 
 #endif // MBWORKER_H

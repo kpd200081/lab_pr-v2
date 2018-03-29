@@ -7,8 +7,6 @@ SOURCES += main.cpp \
     rwworker.cpp \
     comclass.cpp \
     sha1.cpp \
-    aes.cpp \
-    encrypt.cpp \
     mbworker.cpp \
     train.cpp \
     com2class.cpp \
@@ -19,8 +17,6 @@ HEADERS += \
     rwworker.h \
     comclass.h \
     sha1.h \
-    aes.h \
-    encrypt.h \
     mbworker.h \
     train.h \
     com2class.h \

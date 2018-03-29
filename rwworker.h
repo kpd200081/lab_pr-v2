@@ -4,7 +4,6 @@
 #include <iostream>
 #include "comclass.h"
 #include "sha1.h"
-#include "encrypt.h"
 #include <string>
 #include <vector>
 #include <deque>
@@ -16,16 +15,14 @@ class ComClass;
 class RWWorker
 {
 
-    std::string name, key;
+    std::string name;
     bool fileWasCreated=false;
 
     SHA1 checksum;
-    Encrypt aes;
 
 public:
     std::deque<unsigned char> buf;
     RWWorker();
-    void set_key(std::string);
     void set_file(std::string);
     bool init();
     void write();

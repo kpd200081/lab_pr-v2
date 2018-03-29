@@ -5,11 +5,6 @@ RWWorker::RWWorker()
 
 }
 
-void RWWorker::set_key(std::string c_key)
-{
-    key=c_key;
-}
-
 void RWWorker::set_file(std::string c_name)
 {
     name=c_name;
@@ -17,14 +12,6 @@ void RWWorker::set_file(std::string c_name)
 
 void RWWorker::write()
 {
-    buf.push_front('k'); buf.push_front('o'); buf.push_front('c'); buf.push_front('n'); buf.push_front('E');
-    std::string data;
-    for(int i=0; i<buf.size();i++)
-         data+=buf[i];
-    std::string res=aes.work(data,key, false);
-    buf.clear();
-    for(int i=0; i<res.length();i++)
-         buf.push_back(res[i]);
     calcCheckSum();
     std::ofstream out(name);
     for(int i=0; i<buf.size();i++)
@@ -89,6 +76,7 @@ void RWWorker::creationOfFile()
 RWWorker::~RWWorker()
 {}
 
+//
 RWWorker &operator<<(RWWorker& self, ComClass& obj)
 {
     std::vector<unsigned char> t=obj.getWritebleData();
@@ -97,6 +85,7 @@ RWWorker &operator<<(RWWorker& self, ComClass& obj)
     return self;
 }
 
+//
 RWWorker &operator>>(RWWorker& self, ComClass& obj)
 {
     std::vector<unsigned char> t;
@@ -113,7 +102,7 @@ RWWorker &operator>>(RWWorker& self, ComClass& obj)
 
 bool RWWorker::init()
 {
-    if(key.c_str()==NULL||name.c_str()==NULL){
+    if(name.c_str()==NULL){
         MENU_ERROR
         std::cout<<"Err: no data"<<std::endl;
         MENU_END
@@ -139,24 +128,6 @@ bool RWWorker::init()
         MENU_END
         return false;
     }
-
-    std::string data;
-    for(int i=0; i<buf.size();i++)
-        data+=buf[i];
-    std::string res=aes.work(data,key, true);
-    buf.clear();
-    for(int i=0; i<res.length();i++)
-         buf.push_back(res[i]);
-    std::string check; check+=buf[0]; check+=buf[1]; check+=buf[2]; check+=' '; check+=buf[3]; check+=buf[4];
-    if(!(check=="Enc ok")){
-        buf.clear();
-        inf.close();
-        MENU_ERROR
-        std::cout<<"Err: decryption error"<<std::endl;
-        MENU_END
-        return false;
-    }
-    buf.pop_front();  buf.pop_front();  buf.pop_front();  buf.pop_front();  buf.pop_front();
     inf.close();
     return true;
 }

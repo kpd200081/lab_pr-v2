@@ -144,7 +144,7 @@ void Train::updateCarFirstP(Passenger * f)
     while (cur!=NULL) {
         cur->firstp=f;
         //if()
-        cur=dynamic_cast<Car*>(cur->next);
+        cur=cur->next;
     }
 }
 
@@ -161,8 +161,8 @@ std::ostream &operator<<(std::ostream &out, Train &self)
     cout.copyfmt(init);
     Car* cur=self.first;
     while (cur!=NULL) {
-        out<<"\t"<<*cur;
-        cur=dynamic_cast<Car*>(cur->next);
+        cout<<"\t"<<*cur;
+        cur=cur->next;
     }
     return out;
 }
